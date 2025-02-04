@@ -66,13 +66,24 @@ Modbus::Modbus (const Napi::CallbackInfo& info) : Napi::ObjectWrap<Modbus>  (inf
 	}
 
 	if (ctx == NULL) {
-		Napi::Error::New (env, "Modbus connect fail").ThrowAsJavaScriptException ();	
+		Napi::Error::New (env, "Modbus Context Allocation Failed").ThrowAsJavaScriptException ();	
 	}
 
 }
 
+Napi::Value Modbus::connect (const Napi::CallbackInfo& info) {
+
+	if (this->ctx == NULL) {
+		Napi::Error::New (info.Env (), "Modbus Context not Allocated").ThrowAsJavaScriptException ();
+		return Napi::Number::New (info.Env (), -1);	
+	}
+
+	return Napi::Number::New (info.Env (), 0);
+}
+
 Napi::Object Modbus::Init (Napi::Env env, Napi::Object exports) {
 	Napi::Function func = DefineClass (env, "Modbus", {
+			InstanceMethod ("connect", &Modbus::connect)
 			});
 
 	constructor = Napi::Persistent (func);

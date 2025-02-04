@@ -9,6 +9,7 @@ class Modbus : public Napi::ObjectWrap<Modbus> {
 	public:
 		static Napi::Object Init ( Napi::Env env, Napi::Object exports );
 		Modbus ( const Napi::CallbackInfo& info );
+		Napi::Value connect (const Napi::CallbackInfo& info);
 	private:
 		static Napi::FunctionReference constructor;
 		modbus_t *ctx;
