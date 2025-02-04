@@ -8,39 +8,66 @@ Modbus::Modbus (const Napi::CallbackInfo& info) : Napi::ObjectWrap<Modbus>  (inf
 
 	Napi::Env env = info.Env ();
 
-		if ( info.Length () < 3 ) 
-			 Napi::Error::New (env, "Not Enough Arguments").ThrowAsJavaScriptException ();
+	if ( info.Length () < 3 )  {
+
+		Napi::Error::New (env, "Not Enough Arguments").ThrowAsJavaScriptException ();
+		return;
+	}
 
 
-		if ( !info[0].IsString()) 
-			 Napi::TypeError::New (env, "Expected a String").ThrowAsJavaScriptException ();
+	if ( !info[0].IsString())  {
+
+		Napi::TypeError::New (env, "Expected a String").ThrowAsJavaScriptException ();
+		return;
+	}
 
 
-		std::string mode = info[0].As<Napi::String> ().Utf8Value ();
+	std::string mode = info[0].As<Napi::String> ().Utf8Value ();
 
-		if (mode == "tcp") {
+	if (mode == "tcp") {
 
-			if (!info[1].IsString ()) 
-				 Napi::TypeError::New (env, "Expected a String").ThrowAsJavaScriptException ();
+		if (!info[1].IsString ()) {
+			Napi::TypeError::New (env, "Expected a String").ThrowAsJavaScriptException ();
+			return;
+		} 
 
-			if (!info[2].IsNumber ())
-				 Napi::TypeError::New (env, "Expected a Number").ThrowAsJavaScriptException ();
-
-			std::string ip 	= info [1].As <Napi::String> ().Utf8Value ();
-			int port 	= info [2].As <Napi::Number> ().Int32Value ();
-
-			ctx = modbus_new_tcp ( ip.c_str() , port);
+		if (!info[2].IsNumber ()) {
+			Napi::TypeError::New (env, "Expected a Number").ThrowAsJavaScriptException ();
+			return;
 		}
 
-		else if (mode == "rtu") {
+		std::string ip 	= info [1].As <Napi::String> ().Utf8Value ();
+		int port 	= info [2].As <Napi::Number> ().Int32Value ();
 
-			if (info.Length () < 6)  // TODO:Argument Count subject to change. May give default values in future
-				 Napi::Error::New (env, "Not Enough Arguments").ThrowAsJavaScriptException ();
+		ctx = modbus_new_tcp ( ip.c_str() , port);
+	}else if (mode == "rtu") {
+
+		if (info.Length () < 6)  // TODO:Argument Count subject to change. May give default values in future
+		{
+			Napi::Error::New (env, "Not Enough Arguments").ThrowAsJavaScriptException ();
+			return;
 		}
 
-		if (ctx == NULL) {
-			Napi::Error::New (env, "Modbus connect fail").ThrowAsJavaScriptException ();	
+		if (!info[1].IsString ()  || !info[2].IsNumber () || !info[3].IsString () || !info[4].IsNumber () || !info [5].IsNumber ()) {
+			Napi::TypeError::New (env, "Invalid argument type").ThrowAsJavaScriptException ();
+			return;	
 		}
+		
+		std::string device 	= info[1].As<Napi::String> ().Utf8Value ();
+		int baud 		= info[2].As<Napi::Number> ().Int32Value (); 
+		std::string parity 	= info[3].As<Napi::String> ().Utf8Value ();
+		int data_bit		= info[4].As<Napi::Number> ().Int32Value ();
+		int stop_bit 		= info[5].As<Napi::Number> ().Int32Value ();
+		
+		ctx = modbus_new_rtu (device.c_str(), baud, parity[0], data_bit, stop_bit);
+	}else {
+		Napi::Error::New (env, "Invalid modbus Mode | mode : tcp or rtur").ThrowAsJavaScriptException ();
+		return;
+	}
+
+	if (ctx == NULL) {
+		Napi::Error::New (env, "Modbus connect fail").ThrowAsJavaScriptException ();	
+	}
 
 }
 
