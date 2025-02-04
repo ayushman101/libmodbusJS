@@ -1,7 +1,7 @@
 #include <napi.h>
 #include <modbus/modbus.h>
 #include "modbus.h"
-
+#include <errno.h>
 Napi::FunctionReference Modbus::constructor;
 
 Modbus::Modbus (const Napi::CallbackInfo& info) : Napi::ObjectWrap<Modbus>  (info) {
@@ -73,12 +73,19 @@ Modbus::Modbus (const Napi::CallbackInfo& info) : Napi::ObjectWrap<Modbus>  (inf
 
 Napi::Value Modbus::connect (const Napi::CallbackInfo& info) {
 
+	Napi::Env env = info.Env ();
 	if (this->ctx == NULL) {
-		Napi::Error::New (info.Env (), "Modbus Context not Allocated").ThrowAsJavaScriptException ();
-		return Napi::Number::New (info.Env (), -1);	
+		Napi::Error::New (env, "Modbus Context not Allocated").ThrowAsJavaScriptException ();
+		return Napi::Number::New (env, -1);	
 	}
 
-	return Napi::Number::New (info.Env (), 0);
+	if (modbus_connect (this->ctx) == -1) {
+		fprintf (stderr, "Modbus Connect Failed %s\n", modbus_strerror (errno) );
+		modbus_free (this->ctx);
+		Napi::Error::New (env, "Modbus Connect Failed").ThrowAsJavaScriptException ();
+		return Napi::Number::New (env, -1);	
+	}
+	return Napi::Number::New (env, 0);
 }
 
 Napi::Object Modbus::Init (Napi::Env env, Napi::Object exports) {
