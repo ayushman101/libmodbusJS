@@ -1,0 +1,1 @@
+cmd_Release/modbusJS.node := ln -f "Release/obj.target/modbusJS.node" "Release/modbusJS.node" 2>/dev/null || (rm -rf "Release/modbusJS.node" && cp -af "Release/obj.target/modbusJS.node" "Release/modbusJS.node")
