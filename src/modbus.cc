@@ -8,26 +8,45 @@ Modbus::Modbus (const Napi::CallbackInfo& info) : Napi::ObjectWrap<Modbus>  (inf
 
 	Napi::Env env = info.Env ();
 
-	if (info.Length () < 1 || !info[0].IsNumber ()) {
-		Napi::TypeError::New(env, "Expected a number").ThrowAsJavaScriptException();
-	}	
-	
-	ctx = modbus_new_tcp ("127.0.0.1", info[0].As<Napi::Number>().Int32Value());
+		if ( info.Length () < 3 ) 
+			 Napi::Error::New (env, "Not Enough Arguments").ThrowAsJavaScriptException ();
 
-	if (ctx == NULL) {
-		Napi::Error::New (env, "tcp connect fail").ThrowAsJavaScriptException ();	
-	}
-}
 
-Napi::Value Modbus::Add(const Napi::CallbackInfo& info) {
-	double num = info[0].As<Napi::Number>().DoubleValue();
-	return Napi::Number::New(info.Env(), 1 + num);
+		if ( !info[0].IsString()) 
+			 Napi::TypeError::New (env, "Expected a String").ThrowAsJavaScriptException ();
+
+
+		std::string mode = info[0].As<Napi::String> ().Utf8Value ();
+
+		if (mode == "tcp") {
+
+			if (!info[1].IsString ()) 
+				 Napi::TypeError::New (env, "Expected a String").ThrowAsJavaScriptException ();
+
+			if (!info[2].IsNumber ())
+				 Napi::TypeError::New (env, "Expected a Number").ThrowAsJavaScriptException ();
+
+			std::string ip 	= info [1].As <Napi::String> ().Utf8Value ();
+			int port 	= info [2].As <Napi::Number> ().Int32Value ();
+
+			ctx = modbus_new_tcp ( ip.c_str() , port);
+		}
+
+		else if (mode == "rtu") {
+
+			if (info.Length () < 6)  // TODO:Argument Count subject to change. May give default values in future
+				 Napi::Error::New (env, "Not Enough Arguments").ThrowAsJavaScriptException ();
+		}
+
+		if (ctx == NULL) {
+			Napi::Error::New (env, "Modbus connect fail").ThrowAsJavaScriptException ();	
+		}
+
 }
 
 Napi::Object Modbus::Init (Napi::Env env, Napi::Object exports) {
 	Napi::Function func = DefineClass (env, "Modbus", {
-		InstanceMethod ("add", &Modbus::Add),
-	});
+			});
 
 	constructor = Napi::Persistent (func);
 	constructor.SuppressDestruct ();
