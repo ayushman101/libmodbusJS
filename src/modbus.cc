@@ -88,9 +88,20 @@ Napi::Value Modbus::connect (const Napi::CallbackInfo& info) {
 	return Napi::Number::New (env, 0);
 }
 
+void Modbus::close (const Napi::CallbackInfo& info) {
+
+	Napi::Env env = info.Env ();
+	if (this->ctx == NULL) {
+		Napi::Error::New (env, "Modbus Context not Allocated").ThrowAsJavaScriptException ();
+		return;	
+	}
+	modbus_close (this->ctx);
+}
+
 Napi::Object Modbus::Init (Napi::Env env, Napi::Object exports) {
 	Napi::Function func = DefineClass (env, "Modbus", {
-			InstanceMethod ("connect", &Modbus::connect)
+			InstanceMethod ("connect", &Modbus::connect),
+			InstanceMethod ("close", &Modbus::close)
 			});
 
 	constructor = Napi::Persistent (func);
