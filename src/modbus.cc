@@ -96,12 +96,20 @@ void Modbus::close (const Napi::CallbackInfo& info) {
 		return;	
 	}
 	modbus_close (this->ctx);
+	free ();
 }
+
+
+void Modbus::free () {
+	modbus_free (this->ctx);
+	this->ctx = NULL;
+}
+
 
 Napi::Object Modbus::Init (Napi::Env env, Napi::Object exports) {
 	Napi::Function func = DefineClass (env, "Modbus", {
 			InstanceMethod ("connect", &Modbus::connect),
-			InstanceMethod ("close", &Modbus::close)
+			InstanceMethod ("close", &Modbus::close),
 			});
 
 	constructor = Napi::Persistent (func);

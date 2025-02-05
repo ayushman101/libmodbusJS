@@ -13,6 +13,7 @@ class Modbus : public Napi::ObjectWrap<Modbus> {
 		static Napi::FunctionReference constructor;
 		Napi::Value connect (const Napi::CallbackInfo& info);
 		void close (const Napi::CallbackInfo& info);
+		void free ();
 		modbus_t *ctx;
 };
 
