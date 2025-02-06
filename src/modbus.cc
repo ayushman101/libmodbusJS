@@ -82,7 +82,7 @@ Napi::Value Modbus::connect (const Napi::CallbackInfo& info) {
 	if (modbus_connect (this->ctx) == -1) {
 		fprintf (stderr, "Modbus Connect Failed %s\n", modbus_strerror (errno) );
 		modbus_free (this->ctx);
-		Napi::Error::New (env, "Modbus Connect Failed").ThrowAsJavaScriptException ();
+		Napi::Error::New (env, std::string (strerror (errno))).ThrowAsJavaScriptException ();
 		return Napi::Number::New (env, -1);	
 	}
 	return Napi::Number::New (env, 0);
@@ -105,11 +105,57 @@ void Modbus::free () {
 	this->ctx = NULL;
 }
 
+Napi::Value Modbus::setSlave (const Napi::CallbackInfo& info) {
+	Napi::Env env = info.Env ();
+	if (info.Length () < 1) {
+		Napi::Error::New (env, "Modbus Set Slave: Not Enough arguments").ThrowAsJavaScriptException ();
+		free ();
+		return Napi::Number::New (env, -1);
+	}
+
+	if (!info[0].IsNumber ()) {
+		Napi::TypeError::New (env, "Modbus Set Slave: Expected a number").ThrowAsJavaScriptException ();
+		free ();
+		return Napi::Number::New (env, -1);
+	}
+
+	int id = info[0].As<Napi::Number> ().Int32Value ();
+
+	if (id < 1 || id >247) {
+		Napi::Error::New (env, "Invalid Slave Id | range (1-247)").ThrowAsJavaScriptException ();
+		return Napi::Number::New (env, -1);
+	}
+
+	if (modbus_set_slave (this-> ctx, id) == -1) {
+		Napi::Error::New (env, std::string (strerror (errno))).ThrowAsJavaScriptException ();
+		free ();
+		return Napi::Number::New (env, -1);
+	}
+
+	return Napi::Number::New (env, 0);
+}
+
+Napi::Value Modbus::getSlave (const Napi::CallbackInfo& info) {
+	Napi::Env env = info.Env ();
+	if (this->ctx == NULL) {
+		Napi::Error::New (env, "Modbus Context not Allocated").ThrowAsJavaScriptException ();
+		free ();
+		return Napi::Number::New (env, -1);	
+	}
+	int rc = modbus_get_slave (this->ctx);
+	if (rc == -1) {
+		Napi::Error::New (env, std::string (strerror (errno))).ThrowAsJavaScriptException ();
+	}
+
+	return Napi::Number::New (env, rc);
+}
 
 Napi::Object Modbus::Init (Napi::Env env, Napi::Object exports) {
 	Napi::Function func = DefineClass (env, "Modbus", {
 			InstanceMethod ("connect", &Modbus::connect),
 			InstanceMethod ("close", &Modbus::close),
+			InstanceMethod ("setSlave", &Modbus::setSlave),
+			InstanceMethod ("getSlave", &Modbus::getSlave)
 			});
 
 	constructor = Napi::Persistent (func);
