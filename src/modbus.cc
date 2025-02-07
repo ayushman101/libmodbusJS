@@ -2,6 +2,8 @@
 #include <modbus/modbus.h>
 #include "modbus.h"
 #include <errno.h>
+#include <stdlib.h>
+#include <stdio.h>
 Napi::FunctionReference Modbus::constructor;
 
 Modbus::Modbus (const Napi::CallbackInfo& info) : Napi::ObjectWrap<Modbus>  (info) {
@@ -81,7 +83,7 @@ Napi::Value Modbus::connect (const Napi::CallbackInfo& info) {
 
 	if (modbus_connect (this->ctx) == -1) {
 		fprintf (stderr, "Modbus Connect Failed %s\n", modbus_strerror (errno) );
-		modbus_free (this->ctx);
+		free ();
 		Napi::Error::New (env, std::string (strerror (errno))).ThrowAsJavaScriptException ();
 		return Napi::Number::New (env, -1);	
 	}
@@ -109,13 +111,11 @@ Napi::Value Modbus::setSlave (const Napi::CallbackInfo& info) {
 	Napi::Env env = info.Env ();
 	if (info.Length () < 1) {
 		Napi::Error::New (env, "Modbus Set Slave: Not Enough arguments").ThrowAsJavaScriptException ();
-		free ();
 		return Napi::Number::New (env, -1);
 	}
 
 	if (!info[0].IsNumber ()) {
 		Napi::TypeError::New (env, "Modbus Set Slave: Expected a number").ThrowAsJavaScriptException ();
-		free ();
 		return Napi::Number::New (env, -1);
 	}
 
@@ -128,7 +128,6 @@ Napi::Value Modbus::setSlave (const Napi::CallbackInfo& info) {
 
 	if (modbus_set_slave (this-> ctx, id) == -1) {
 		Napi::Error::New (env, std::string (strerror (errno))).ThrowAsJavaScriptException ();
-		free ();
 		return Napi::Number::New (env, -1);
 	}
 
@@ -139,7 +138,6 @@ Napi::Value Modbus::getSlave (const Napi::CallbackInfo& info) {
 	Napi::Env env = info.Env ();
 	if (this->ctx == NULL) {
 		Napi::Error::New (env, "Modbus Context not Allocated").ThrowAsJavaScriptException ();
-		free ();
 		return Napi::Number::New (env, -1);	
 	}
 	int rc = modbus_get_slave (this->ctx);
@@ -150,12 +148,45 @@ Napi::Value Modbus::getSlave (const Napi::CallbackInfo& info) {
 	return Napi::Number::New (env, rc);
 }
 
+Napi::Value Modbus::readRegisters (const Napi::CallbackInfo& info) {
+	Napi::Env env = info.Env ();
+
+	if (this->ctx == NULL) {
+		Napi::Error::New (env, "Modbus Context not Allocated").ThrowAsJavaScriptException ();
+		return Napi::Number::New (env, -1);	
+	}
+
+	if (info.Length () < 2) {
+		Napi::Error::New (env, "Not enough arguments").ThrowAsJavaScriptException ();
+		return Napi::Number::New (env, -1);
+	}
+	
+		
+	const int reg_addr = info[0].As <Napi::Number> ().Int32Value (), nb = info[1].As <Napi::Number> ().Int32Value ();
+	uint16_t tab_reg[nb];
+
+	int rc = modbus_read_registers (this->ctx, reg_addr, nb, tab_reg);
+	if (rc == -1) {
+		Napi::Error::New (env, std::string (strerror (errno))).ThrowAsJavaScriptException ();
+		return Napi::Number::New (env, rc);
+	}
+
+	Napi::Array arr = Napi::Array::New(env, nb);	
+
+	for (int i = 0;i < nb;i++) {
+		arr.Set ((uint32_t)i, Napi::Number::New (env, tab_reg[i]));
+	}
+	
+	return arr;
+}
+
 Napi::Object Modbus::Init (Napi::Env env, Napi::Object exports) {
 	Napi::Function func = DefineClass (env, "Modbus", {
 			InstanceMethod ("connect", &Modbus::connect),
 			InstanceMethod ("close", &Modbus::close),
 			InstanceMethod ("setSlave", &Modbus::setSlave),
-			InstanceMethod ("getSlave", &Modbus::getSlave)
+			InstanceMethod ("getSlave", &Modbus::getSlave),
+			InstanceMethod ("readRegisters", &Modbus::readRegisters)
 			});
 
 	constructor = Napi::Persistent (func);
