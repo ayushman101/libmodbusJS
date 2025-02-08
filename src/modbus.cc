@@ -180,13 +180,38 @@ Napi::Value Modbus::readRegisters (const Napi::CallbackInfo& info) {
 	return arr;
 }
 
+Napi::Value Modbus::writeRegister (const Napi::CallbackInfo& info) {
+	Napi::Env env = info.Env ();
+
+	if (this->ctx == NULL) {
+		Napi::Error::New (env, "Modbus Context not Allocated").ThrowAsJavaScriptException ();
+		return Napi::Number::New (env, -1);	
+	}
+
+	if (info.Length () < 2) {
+		Napi::Error::New (env, "Not enough arguments").ThrowAsJavaScriptException ();
+		return Napi::Number::New (env, -1);
+	}
+	
+	const int reg_addr  = info[0].As <Napi::Number> ().Int32Value (); 
+	const uint16_t 	val = info[1].As <Napi::Number> ().Int32Value ();
+
+	int rc = modbus_write_register (this->ctx, reg_addr, val);
+
+	if (rc == -1) {
+		Napi::Error::New (env, std::string (strerror (errno))).ThrowAsJavaScriptException ();
+	}
+	return Napi::Number::New (env, rc);
+}
+
 Napi::Object Modbus::Init (Napi::Env env, Napi::Object exports) {
 	Napi::Function func = DefineClass (env, "Modbus", {
 			InstanceMethod ("connect", &Modbus::connect),
 			InstanceMethod ("close", &Modbus::close),
 			InstanceMethod ("setSlave", &Modbus::setSlave),
 			InstanceMethod ("getSlave", &Modbus::getSlave),
-			InstanceMethod ("readRegisters", &Modbus::readRegisters)
+			InstanceMethod ("readRegisters", &Modbus::readRegisters),
+			InstanceMethod ("writeRegister", &Modbus::writeRegister)
 			});
 
 	constructor = Napi::Persistent (func);

@@ -17,6 +17,7 @@ class Modbus : public Napi::ObjectWrap<Modbus> {
 		Napi::Value setSlave (const Napi::CallbackInfo& info);
 		Napi::Value getSlave (const Napi::CallbackInfo& info);
 		Napi::Value readRegisters (const Napi::CallbackInfo& info);
+		Napi::Value writeRegister (const Napi::CallbackInfo& info);
 		modbus_t *ctx;
 };
 
