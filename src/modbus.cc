@@ -204,6 +204,52 @@ Napi::Value Modbus::writeRegister (const Napi::CallbackInfo& info) {
 	return Napi::Number::New (env, rc);
 }
 
+
+
+Napi::Value Modbus::writeRegisters (const Napi::CallbackInfo& info) {
+	Napi::Env env = info.Env ();
+
+	if (this->ctx == NULL) {
+		Napi::Error::New (env, "Modbus Context not Allocated").ThrowAsJavaScriptException ();
+		return Napi::Number::New (env, -1);	
+	}
+
+	if (info.Length () < 3) {
+		Napi::Error::New (env, "Not enough arguments").ThrowAsJavaScriptException ();
+		return Napi::Number::New (env, -1);
+	}
+
+	if (!info[2].IsArray ()) {
+		Napi::Error::New (env, "Expected an array").ThrowAsJavaScriptException ();
+		return Napi::Number::New (env, -1);
+	}	
+		
+	const int reg_addr = info[0].As <Napi::Number> ().Int32Value (), nb = info[1].As <Napi::Number> ().Int32Value ();
+	Napi::Array inpArr = info[2].As <Napi::Array>  ();
+	size_t length 	   = inpArr.Length ();
+	uint16_t arr [length];
+
+	for (size_t i=0;i<length;i++) {
+		
+		Napi::Value val = inpArr.Get (i);	
+
+		if (!val.IsNumber()) {
+			Napi::TypeError::New(env, "Array elements must be numbers").ThrowAsJavaScriptException();
+			return Napi::Number::New (env, -1);
+		}
+
+		arr[i] = static_cast<uint16_t>(val.As<Napi::Number>().Uint32Value());
+	}
+	
+	int rc = modbus_write_registers (this->ctx, reg_addr, nb, arr);
+	if (rc == -1) {
+		Napi::Error::New (env, std::string (strerror (errno))).ThrowAsJavaScriptException ();
+	}
+
+	return Napi::Number::New (env, rc);
+}
+
+
 Napi::Object Modbus::Init (Napi::Env env, Napi::Object exports) {
 	Napi::Function func = DefineClass (env, "Modbus", {
 			InstanceMethod ("connect", &Modbus::connect),
@@ -211,7 +257,8 @@ Napi::Object Modbus::Init (Napi::Env env, Napi::Object exports) {
 			InstanceMethod ("setSlave", &Modbus::setSlave),
 			InstanceMethod ("getSlave", &Modbus::getSlave),
 			InstanceMethod ("readRegisters", &Modbus::readRegisters),
-			InstanceMethod ("writeRegister", &Modbus::writeRegister)
+			InstanceMethod ("writeRegister", &Modbus::writeRegister),
+			InstanceMethod ("writeRegisters", &Modbus::writeRegisters)
 			});
 
 	constructor = Napi::Persistent (func);

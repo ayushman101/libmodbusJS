@@ -5,8 +5,9 @@ try {
 	console.log (modbus.connect());
 	console.log (modbus.setSlave (1));
 	console.log ('Modubs slave ID: ', modbus.getSlave ());
-	console.log ('writeRegister: ', modbus.writeRegister (1,0));
-	console.log ('readRegister: ', modbus.readRegisters (1,1));
+	console.log ('writeRegister: ', modbus.writeRegister (1, 10));
+	console.log ('writeRegisters: ', modbus.writeRegisters (2, 3, [12, 15, 23]));
+	console.log ('readRegisters: ', modbus.readRegisters (1, 5));
 	modbus.close ();
 } catch (error) {
 	console.error (error);
