@@ -31,7 +31,7 @@ Modbus::Modbus (const Napi::CallbackInfo& info) : Napi::ObjectWrap<Modbus>  (inf
 		if (!info[1].IsString ()) {
 			Napi::TypeError::New (env, "Expected a String").ThrowAsJavaScriptException ();
 			return;
-		} 
+		}
 
 		if (!info[2].IsNumber ()) {
 			Napi::TypeError::New (env, "Expected a Number").ThrowAsJavaScriptException ();
@@ -52,23 +52,23 @@ Modbus::Modbus (const Napi::CallbackInfo& info) : Napi::ObjectWrap<Modbus>  (inf
 
 		if (!info[1].IsString ()  || !info[2].IsNumber () || !info[3].IsString () || !info[4].IsNumber () || !info [5].IsNumber ()) {
 			Napi::TypeError::New (env, "Invalid argument type").ThrowAsJavaScriptException ();
-			return;	
+			return;
 		}
-		
+
 		std::string device 	= info[1].As<Napi::String> ().Utf8Value ();
-		int baud 		= info[2].As<Napi::Number> ().Int32Value (); 
+		int baud 		= info[2].As<Napi::Number> ().Int32Value ();
 		std::string parity 	= info[3].As<Napi::String> ().Utf8Value ();
 		int data_bit		= info[4].As<Napi::Number> ().Int32Value ();
 		int stop_bit 		= info[5].As<Napi::Number> ().Int32Value ();
-		
+
 		ctx = modbus_new_rtu (device.c_str(), baud, parity[0], data_bit, stop_bit);
 	}else {
-		Napi::Error::New (env, "Invalid modbus Mode | mode : tcp or rtur").ThrowAsJavaScriptException ();
+		Napi::Error::New (env, "Invalid modbus Mode | mode : tcp or rtu").ThrowAsJavaScriptException ();
 		return;
 	}
 
 	if (ctx == NULL) {
-		Napi::Error::New (env, "Modbus Context Allocation Failed").ThrowAsJavaScriptException ();	
+		Napi::Error::New (env, "Modbus Context Allocation Failed").ThrowAsJavaScriptException ();
 	}
 
 }
@@ -78,14 +78,14 @@ Napi::Value Modbus::connect (const Napi::CallbackInfo& info) {
 	Napi::Env env = info.Env ();
 	if (this->ctx == NULL) {
 		Napi::Error::New (env, "Modbus Context not Allocated").ThrowAsJavaScriptException ();
-		return Napi::Number::New (env, -1);	
+		return Napi::Number::New (env, -1);
 	}
 
 	if (modbus_connect (this->ctx) == -1) {
 		fprintf (stderr, "Modbus Connect Failed %s\n", modbus_strerror (errno) );
 		free ();
 		Napi::Error::New (env, std::string (strerror (errno))).ThrowAsJavaScriptException ();
-		return Napi::Number::New (env, -1);	
+		return Napi::Number::New (env, -1);
 	}
 	return Napi::Number::New (env, 0);
 }
@@ -95,12 +95,11 @@ void Modbus::close (const Napi::CallbackInfo& info) {
 	Napi::Env env = info.Env ();
 	if (this->ctx == NULL) {
 		Napi::Error::New (env, "Modbus Context not Allocated").ThrowAsJavaScriptException ();
-		return;	
+		return;
 	}
 	modbus_close (this->ctx);
 	free ();
 }
-
 
 void Modbus::free () {
 	modbus_free (this->ctx);
@@ -138,7 +137,7 @@ Napi::Value Modbus::getSlave (const Napi::CallbackInfo& info) {
 	Napi::Env env = info.Env ();
 	if (this->ctx == NULL) {
 		Napi::Error::New (env, "Modbus Context not Allocated").ThrowAsJavaScriptException ();
-		return Napi::Number::New (env, -1);	
+		return Napi::Number::New (env, -1);
 	}
 	int rc = modbus_get_slave (this->ctx);
 	if (rc == -1) {
@@ -236,7 +235,7 @@ Napi::Value Modbus::writeRegister (const Napi::CallbackInfo& info) {
 		return Napi::Number::New (env, -1);
 	}
 	
-	const int reg_addr  = info[0].As <Napi::Number> ().Int32Value (); 
+	const int reg_addr  = info[0].As <Napi::Number> ().Int32Value ();
 	const uint16_t 	val = info[1].As <Napi::Number> ().Int32Value ();
 
 	int rc = modbus_write_register (this->ctx, reg_addr, val);
