@@ -1,3 +1,4 @@
+#include <iostream>
 #include <napi.h>
 #include <modbus/modbus.h>
 #include "modbus.h"
@@ -211,6 +212,7 @@ Napi::Value Modbus::writeRegisters (const Napi::CallbackInfo& info) {
 			return Napi::Number::New (env, -1);
 		}
 
+		std::cout << val.As <Napi::Number>().Uint32Value ()  << std::endl;
 		arr[i] = static_cast<uint16_t>(val.As<Napi::Number>().Uint32Value());
 	}
 	
