@@ -212,7 +212,6 @@ Napi::Value Modbus::writeRegisters (const Napi::CallbackInfo& info) {
 			return Napi::Number::New (env, -1);
 		}
 
-		std::cout << val.As <Napi::Number>().Uint32Value ()  << std::endl;
 		arr[i] = static_cast<uint16_t>(val.As<Napi::Number>().Uint32Value());
 	}
 	

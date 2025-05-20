@@ -8,8 +8,8 @@ const require = createRequire(import.meta.url);
 const { Modbus } = require('../../build/Release/modbusJS');
 
 class Worker {
-	constructor (config) {
-		const modbus = new Modbus ("rtu",config.port ?? "/dev/ttyACM1", 19200, 'N', 8, 1);
+	constructor () {
+		const modbus = new Modbus ("rtu","/dev/ttyACM1", 19200, 'N', 8, 1);
 		modbus.connect();
 		console.log (modbus.connect());
 		console.log ('Modbus connection success');
@@ -25,4 +25,4 @@ class Worker {
 	}
 }
 
-new Worker (workerData);
+new Worker ();
