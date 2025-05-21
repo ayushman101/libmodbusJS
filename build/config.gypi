@@ -447,16 +447,6 @@
     "want_separate_host_toolset": 0,
     "nodedir": "/home/scarab/.cache/node-gyp/22.13.1",
     "python": "/usr/bin/python3",
-    "standalone_static_library": 1,
-    "user_agent": "npm/10.9.2 node/v22.13.1 linux x64 workspaces/false",
-    "userconfig": "/home/scarab/.npmrc",
-    "local_prefix": "/home/scarab/libmodbusJS",
-    "prefix": "/home/scarab/.nvm/versions/node/v22.13.1",
-    "npm_version": "10.9.2",
-    "cache": "/home/scarab/.npm",
-    "node_gyp": "/home/scarab/.nvm/versions/node/v22.13.1/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js",
-    "globalconfig": "/home/scarab/.nvm/versions/node/v22.13.1/etc/npmrc",
-    "init_module": "/home/scarab/.npm-init.js",
-    "global_prefix": "/home/scarab/.nvm/versions/node/v22.13.1"
+    "standalone_static_library": 1
   }
 }

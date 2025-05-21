@@ -138,7 +138,7 @@ LDFLAGS_Release := \
 	-m64
 
 LIBS := \
-	-lmodbus
+	/usr/local/lib/libmodbus.a
 
 $(obj).target/modbusJS.node: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
 $(obj).target/modbusJS.node: LIBS := $(LIBS)
