@@ -25,6 +25,7 @@ CFLAGS_Debug := \
 	-Wall \
 	-Wextra \
 	-Wno-unused-parameter \
+	-m64 \
 	-g \
 	-O0
 
@@ -39,14 +40,14 @@ CFLAGS_CC_Debug := \
 	-std=gnu++17
 
 INCS_Debug := \
-	-I/home/ucf-release/.cache/node-gyp/22.14.0/include/node \
-	-I/home/ucf-release/.cache/node-gyp/22.14.0/src \
-	-I/home/ucf-release/.cache/node-gyp/22.14.0/deps/openssl/config \
-	-I/home/ucf-release/.cache/node-gyp/22.14.0/deps/openssl/openssl/include \
-	-I/home/ucf-release/.cache/node-gyp/22.14.0/deps/uv/include \
-	-I/home/ucf-release/.cache/node-gyp/22.14.0/deps/zlib \
-	-I/home/ucf-release/.cache/node-gyp/22.14.0/deps/v8/include \
-	-I/home/ucf-release/libmodbus/js/node_modules/node-addon-api \
+	-I/home/scarab/.cache/node-gyp/22.13.1/include/node \
+	-I/home/scarab/.cache/node-gyp/22.13.1/src \
+	-I/home/scarab/.cache/node-gyp/22.13.1/deps/openssl/config \
+	-I/home/scarab/.cache/node-gyp/22.13.1/deps/openssl/openssl/include \
+	-I/home/scarab/.cache/node-gyp/22.13.1/deps/uv/include \
+	-I/home/scarab/.cache/node-gyp/22.13.1/deps/zlib \
+	-I/home/scarab/.cache/node-gyp/22.13.1/deps/v8/include \
+	-I/home/scarab/libmodbusJS/node_modules/node-addon-api \
 	-I/usr/include
 
 DEFS_Release := \
@@ -70,6 +71,7 @@ CFLAGS_Release := \
 	-Wall \
 	-Wextra \
 	-Wno-unused-parameter \
+	-m64 \
 	-O3 \
 	-fno-omit-frame-pointer
 
@@ -84,14 +86,14 @@ CFLAGS_CC_Release := \
 	-std=gnu++17
 
 INCS_Release := \
-	-I/home/ucf-release/.cache/node-gyp/22.14.0/include/node \
-	-I/home/ucf-release/.cache/node-gyp/22.14.0/src \
-	-I/home/ucf-release/.cache/node-gyp/22.14.0/deps/openssl/config \
-	-I/home/ucf-release/.cache/node-gyp/22.14.0/deps/openssl/openssl/include \
-	-I/home/ucf-release/.cache/node-gyp/22.14.0/deps/uv/include \
-	-I/home/ucf-release/.cache/node-gyp/22.14.0/deps/zlib \
-	-I/home/ucf-release/.cache/node-gyp/22.14.0/deps/v8/include \
-	-I/home/ucf-release/libmodbus/js/node_modules/node-addon-api \
+	-I/home/scarab/.cache/node-gyp/22.13.1/include/node \
+	-I/home/scarab/.cache/node-gyp/22.13.1/src \
+	-I/home/scarab/.cache/node-gyp/22.13.1/deps/openssl/config \
+	-I/home/scarab/.cache/node-gyp/22.13.1/deps/openssl/openssl/include \
+	-I/home/scarab/.cache/node-gyp/22.13.1/deps/uv/include \
+	-I/home/scarab/.cache/node-gyp/22.13.1/deps/zlib \
+	-I/home/scarab/.cache/node-gyp/22.13.1/deps/v8/include \
+	-I/home/scarab/libmodbusJS/node_modules/node-addon-api \
 	-I/usr/include
 
 OBJS := \
@@ -127,11 +129,13 @@ $(obj).$(TOOLSET)/$(TARGET)/%.o: $(obj)/%.cc FORCE_DO_CMD
 ### Rules for final target.
 LDFLAGS_Debug := \
 	-pthread \
-	-rdynamic
+	-rdynamic \
+	-m64
 
 LDFLAGS_Release := \
 	-pthread \
-	-rdynamic
+	-rdynamic \
+	-m64
 
 LIBS := \
 	-lmodbus
