@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build":"node-gyp configure build"
+        "build":"node-gyp rebuild"
     },
     "imports": {
         "#worker/*": "./test/workerTest/*",
@@ -16,6 +16,7 @@
     "license": "ISC",
     "description": "",
     "dependencies": {
-        "node-addon-api": "^8.3.0"
+        "node-addon-api": "^8.3.0",
+        "node-pre-gyp" : "^1.0.0"
     }
 }
