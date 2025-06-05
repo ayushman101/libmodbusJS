@@ -31,7 +31,7 @@ jobs:
             sudo DEBIAN_FRONTEND=noninteractive apt-get install -y libmodbus-dev
             sudo cp ./bin/libmodbus.a /usr/local/lib/libmodbus.a
           elif [[ "$RUNNER_OS" == "macOS" ]]; then
-            brew install automake
+            brew install automake libtool
             git clone https://github.com/stephane/libmodbus.git
             cd libmodbus && ./autogen.sh && ./configure --disable-shared --enable-static && make
             cp src/.libs/libmodbus.a ../libmodbus.a
