@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest] # [ubuntu-latest] #, windows-latest,
+        os: [macos-latest, ubuntu-latest] # [ubuntu-latest] #, windows-latest,
         node: [18, 20, 21, 24] # you can adjust Node.js versions
 
     steps:
