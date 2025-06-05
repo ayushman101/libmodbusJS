@@ -23,10 +23,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+
       - name: Install libmodbus
         run: |
           sudo apt-get update -y
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y libmodbus-dev
+          cp ../../bin/libmodbus.a /usr/local/lib/libmodbus.a
 
       - name: Install dependencies
         run: npm install
