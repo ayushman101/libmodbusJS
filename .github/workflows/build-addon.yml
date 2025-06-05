@@ -28,7 +28,7 @@ jobs:
         run: |
           sudo apt-get update -y
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y libmodbus-dev
-          pwd
+          ls
           cp ../../bin/libmodbus.a /usr/local/lib/libmodbus.a
 
       - name: Install dependencies
