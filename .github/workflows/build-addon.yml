@@ -29,11 +29,11 @@ jobs:
           if [[ "$RUNNER_OS" == "Linux" ]]; then
             sudo apt-get update -y
             sudo DEBIAN_FRONTEND=noninteractive apt-get install -y libmodbus-dev
-            sudo cp ./bin/libmodbus.a $GITHUB_WORKSPACE/bin/libmodbus.a
           elif [[ "$RUNNER_OS" == "macOS" ]]; then
             brew install automake libtool
             git clone https://github.com/stephane/libmodbus.git
-            cd libmodbus && ./autogen.sh && ./configure --disable-shared --enable-static && make
+            sudo cd libmodbus && ./autogen.sh 
+            sudo ./configure --disable-shared --enable-static && make
             sudo cp src/.libs/libmodbus.a $GITHUB_WORKSPACE/bin/libmodbus.a
           fi
 
