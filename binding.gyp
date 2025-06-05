@@ -6,7 +6,7 @@
 			"src/addon.cc",
 			"src/modbus.cc"
 		],
-		"libraries": ["<(module_root_dir)>/bin/libmodbus.a"],
+		"libraries": ["./bin/libmodbus.a"],
 		"include_dirs": [
 			"<!@(node -p \"require('node-addon-api').include\")",
 			"/usr/include"
