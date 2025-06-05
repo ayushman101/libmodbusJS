@@ -2,9 +2,9 @@ name: Build Addon
 
 on:
   push:
-    branches: [node-pre-gyp]
+    branches: [mac-build-test]
   pull_request:
-    branches: [node-pre-gyp]
+    branches: [mac-build-test]
 
 jobs:
   build:
@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest] #, windows-latest, macos-latest]
+        os: [macos-latest] # [ubuntu-latest] #, windows-latest,
         node: [18, 20, 21, 24] # you can adjust Node.js versions
 
     steps:
@@ -26,10 +26,16 @@ jobs:
 
       - name: Install libmodbus
         run: |
-          sudo apt-get update -y
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y libmodbus-dev
-          ls
-          sudo cp ./bin/libmodbus.a /usr/local/lib/libmodbus.a
+          if [[ "$RUNNER_OS" == "Linux" ]]; then
+            sudo apt-get update -y
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y libmodbus-dev
+            sudo cp ./bin/libmodbus.a /usr/local/lib/libmodbus.a
+          elif [[ "$RUNNER_OS" == "macOS" ]]; then
+            brew install automake
+            git clone https://github.com/stephane/libmodbus.git
+            cd libmodbus && ./autogen.sh && ./configure --disable-shared --enable-static && make
+            cp src/.libs/libmodbus.a ../libmodbus.a
+
 
       - name: Install dependencies
         run: npm install
