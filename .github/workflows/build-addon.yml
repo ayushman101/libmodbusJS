@@ -61,6 +61,6 @@ jobs:
 
       - name: Publish binary to GitHub Release
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_PRE_GYP_GITHUB_TOKEN: ${{ secrets.NODE_PRE_GYP_GITHUB_TOKEN}}
         run: |
           npx node-pre-gyp-github publish
