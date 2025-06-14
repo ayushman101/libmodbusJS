@@ -54,7 +54,7 @@ jobs:
           mkdir -p ./lib/binding/$(node -p "process.platform")-$(node -p "process.arch")
 
           # Copy built binary to target path
-          sudo cp ./build/Release/libmodbusjs.node ./lib/binding/$(node -p "process.platform")-$(node -p "process.arch")/
+          sudo cp ./build/Release/modbusJS.node ./lib/binding/$(node -p "process.platform")-$(node -p "process.arch")/
 
           npx node-pre-gyp package
 
