@@ -48,11 +48,18 @@ jobs:
 
       - name: Build and package addon
         run: |
-          npx node-pre-gyp rebuild
-          npx node-pre-gyp package
+          node-pre-gyp rebuild
+
+          # Create target path
+          mkdir -p ./lib/binding/$(node -p "process.platform")-$(node -p "process.arch")
+
+          # Copy built binary to target path
+          cp ./build/Release/libmodbusjs.node ./lib/binding/$(node -p "process.platform")-$(node -p "process.arch")/
+
+          node-pre-gyp package
 
       - name: Publish binary to GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          npx node-pre-gyp-github publish
+          node-pre-gyp-github publish
