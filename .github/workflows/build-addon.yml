@@ -48,7 +48,7 @@ jobs:
 
       - name: Build and package addon
         run: |
-          npx node-pre-gyp rebuild
+          npm run build
 
           # Create target path
           sudo mkdir -p ./lib/binding/$(node -p "process.platform")-$(node -p "process.arch")
