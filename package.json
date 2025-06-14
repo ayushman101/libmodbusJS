@@ -20,7 +20,7 @@
         "node-pre-gyp": "^0.17.0"
     },
     "binary" : {
-        "module_name": "libmodbusjs",
+        "module_name": "modbusJS",
         "module_path": "./lib/binding/{platform}-{arch}",
         "package_name": "libmodbusjs-v{version}-{node_abi}-{platform}-{arch}.tar.gz",
         "remote_path" : "v/{version}",

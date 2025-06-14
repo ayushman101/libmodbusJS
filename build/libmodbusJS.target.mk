@@ -40,14 +40,14 @@ CFLAGS_CC_Debug := \
 	-std=gnu++17
 
 INCS_Debug := \
-	-I/home/scarab/.cache/node-gyp/22.13.1/include/node \
-	-I/home/scarab/.cache/node-gyp/22.13.1/src \
-	-I/home/scarab/.cache/node-gyp/22.13.1/deps/openssl/config \
-	-I/home/scarab/.cache/node-gyp/22.13.1/deps/openssl/openssl/include \
-	-I/home/scarab/.cache/node-gyp/22.13.1/deps/uv/include \
-	-I/home/scarab/.cache/node-gyp/22.13.1/deps/zlib \
-	-I/home/scarab/.cache/node-gyp/22.13.1/deps/v8/include \
-	-I/home/scarab/libmodbusJS/node_modules/node-addon-api \
+	-I/home/ay/.cache/node-gyp/22.11.0/include/node \
+	-I/home/ay/.cache/node-gyp/22.11.0/src \
+	-I/home/ay/.cache/node-gyp/22.11.0/deps/openssl/config \
+	-I/home/ay/.cache/node-gyp/22.11.0/deps/openssl/openssl/include \
+	-I/home/ay/.cache/node-gyp/22.11.0/deps/uv/include \
+	-I/home/ay/.cache/node-gyp/22.11.0/deps/zlib \
+	-I/home/ay/.cache/node-gyp/22.11.0/deps/v8/include \
+	-I/home/ay/libmodbusJS/node_modules/node-addon-api \
 	-I/usr/include
 
 DEFS_Release := \
@@ -86,14 +86,14 @@ CFLAGS_CC_Release := \
 	-std=gnu++17
 
 INCS_Release := \
-	-I/home/scarab/.cache/node-gyp/22.13.1/include/node \
-	-I/home/scarab/.cache/node-gyp/22.13.1/src \
-	-I/home/scarab/.cache/node-gyp/22.13.1/deps/openssl/config \
-	-I/home/scarab/.cache/node-gyp/22.13.1/deps/openssl/openssl/include \
-	-I/home/scarab/.cache/node-gyp/22.13.1/deps/uv/include \
-	-I/home/scarab/.cache/node-gyp/22.13.1/deps/zlib \
-	-I/home/scarab/.cache/node-gyp/22.13.1/deps/v8/include \
-	-I/home/scarab/libmodbusJS/node_modules/node-addon-api \
+	-I/home/ay/.cache/node-gyp/22.11.0/include/node \
+	-I/home/ay/.cache/node-gyp/22.11.0/src \
+	-I/home/ay/.cache/node-gyp/22.11.0/deps/openssl/config \
+	-I/home/ay/.cache/node-gyp/22.11.0/deps/openssl/openssl/include \
+	-I/home/ay/.cache/node-gyp/22.11.0/deps/uv/include \
+	-I/home/ay/.cache/node-gyp/22.11.0/deps/zlib \
+	-I/home/ay/.cache/node-gyp/22.11.0/deps/v8/include \
+	-I/home/ay/libmodbusJS/node_modules/node-addon-api \
 	-I/usr/include
 
 OBJS := \
@@ -138,7 +138,7 @@ LDFLAGS_Release := \
 	-m64
 
 LIBS := \
-	/usr/local/lib/libmodbus.a
+	/home/ay/libmodbusJS/deps/libmodbus.a
 
 $(obj).target/modbusJS.node: GYP_LDFLAGS := $(LDFLAGS_$(BUILDTYPE))
 $(obj).target/modbusJS.node: LIBS := $(LIBS)
