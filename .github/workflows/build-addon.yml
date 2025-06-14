@@ -2,9 +2,9 @@ name: Build Addon
 
 on:
   push:
-    branches: [mac-build-test]
+    branches: [master]
   pull_request:
-    branches: [mac-build-test]
+    branches: [master]
 
 jobs:
   build:
@@ -44,9 +44,15 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pwd
-          ls deps/
           npm install
 
-      - name: Build addon
-        run: npm run build  # Make sure this calls node-gyp correctly
+      - name: Build and package addon
+        run: |
+          npx node-pre-gyp rebuild
+          npx node-pre-gyp package
+
+      - name: Publish binary to GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npx node-pre-gyp-github publish

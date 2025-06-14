@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build":"node-gyp rebuild"
+        "build":"node-pre-gyp rebuild"
     },
     "imports": {
         "#worker/*": "./test/workerTest/*",
@@ -18,5 +18,12 @@
     "dependencies": {
         "node-addon-api": "^8.3.0",
         "node-pre-gyp": "^0.17.0"
+    },
+    "binary" : {
+        "module_name": "libmodbusjs",
+        "module_path": "./lib/binding/{platform}-{arch}",
+        "package_name": "libmodbusjs-v{version}-{node_abi}-{platform}-{arch}.tar.gz",
+        "remote_path" : "v/{version}",
+        "host" : "https://github.com/ayushman101/libmodbusJS/releases/download/"
     }
 }
