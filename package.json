@@ -11,6 +11,10 @@
         "#worker/*": "./test/workerTest/*",
         "#build/*": "./build/*"
     },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ayushman101/libmodbusJS.git"
+    },
     "keywords": [],
     "author": "",
     "license": "ISC",
