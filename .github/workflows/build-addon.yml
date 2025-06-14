@@ -51,7 +51,7 @@ jobs:
           npm run build
 
           # Create target path
-          sudo mkdir -p ./lib/binding/$(node -p "process.platform")-$(node -p "process.arch")
+          mkdir -p ./lib/binding/$(node -p "process.platform")-$(node -p "process.arch")
 
           # Copy built binary to target path
           sudo cp ./build/Release/modbusJS.node ./lib/binding/$(node -p "process.platform")-$(node -p "process.arch")/
