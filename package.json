@@ -35,6 +35,7 @@
         "src/",
         "binding.gyp",
         "bin/",
+        "lib/",
         "package.json",
         "README.md",
         "index.js"
