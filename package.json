@@ -1,17 +1,16 @@
 {
     "name": "libmodbusjs",
     "type": "module",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build":"node-pre-gyp rebuild"
+        "build": "node-pre-gyp rebuild"
     },
     "imports": {
         "#worker/*": "./test/workerTest/*",
         "#build/*": "./build/*"
     },
-
     "repository": {
         "type": "git",
         "url": "https://github.com/ayushman101/libmodbusJS.git"
@@ -24,12 +23,12 @@
         "node-addon-api": "^8.3.0",
         "node-pre-gyp": "^0.17.0"
     },
-    "binary" : {
+    "binary": {
         "module_name": "modbusJS",
         "module_path": "./lib/binding/{platform}-{arch}",
         "package_name": "libmodbusjs-v{version}-{node_abi}-{platform}-{arch}.tar.gz",
-        "remote_path" : "v/{version}",
-        "host" : "https://github.com/ayushman101/libmodbusJS/releases/download/"
+        "remote_path": "v/{version}",
+        "host": "https://github.com/ayushman101/libmodbusJS/releases/download/"
     },
     "files": [
         "src/",
