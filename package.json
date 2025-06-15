@@ -30,7 +30,7 @@
         "package_name": "libmodbusjs-v{version}-{node_abi}-{platform}-{arch}.tar.gz",
         "remote_path" : "v/{version}",
         "host" : "https://github.com/ayushman101/libmodbusJS/releases/download/"
-    }
+    },
     "files": [
         "src/",
         "binding.gyp",
