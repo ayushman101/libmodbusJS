@@ -31,4 +31,12 @@
         "remote_path" : "v/{version}",
         "host" : "https://github.com/ayushman101/libmodbusJS/releases/download/"
     }
+    "files": [
+        "src/",
+        "binding.gyp",
+        "bin/",
+        "package.json",
+        "README.md",
+        "index.js"
+    ]
 }
