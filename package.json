@@ -3,6 +3,17 @@
     "type": "module",
     "version": "1.0.3",
     "main": "index.js",
+    "keywords": [
+        "modbus",
+        "modbus-tcp",
+        "node-addon",
+        "c++ addon",
+        "industrial",
+        "automation",
+        "libmodbus",
+        "napi",
+        "thread-safe"
+    ],
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "node-pre-gyp rebuild",
@@ -16,10 +27,9 @@
         "type": "git",
         "url": "https://github.com/ayushman101/libmodbusJS.git"
     },
-    "keywords": [],
-    "author": "",
+    "author": "ayushman_singh101",
     "license": "ISC",
-    "description": "",
+    "description": "A modbus protocol which is a C++ node addon",
     "dependencies": {
         "node-addon-api": "^8.3.0",
         "node-pre-gyp": "^0.17.0"
